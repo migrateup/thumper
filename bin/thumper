@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+import os
 import argparse
+import sys
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -36,3 +38,9 @@ and squat.  ''',
 
 if __name__ == '__main__':
     args = get_args()
+    try:
+        os.makedirs(args.dest_dir)
+    except OSError:
+        sys.stderr.write('Dest directory "{}" already exists, or we don\'t have write permissions.\n')
+        sys.exit(1)
+    
