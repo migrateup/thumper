@@ -65,10 +65,8 @@ def create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height):
 
 if __name__ == '__main__':
     args = get_args()
-    try:
-        os.makedirs(args.dest_dir)
-    except OSError:
-        sys.stderr.write('Dest directory "{}" already exists, or we don\'t have write permissions.\n'.format(args.dest_dir))
+    if os.path.isdir(args.dest_dir):
+        sys.stderr.write('Dest directory "{}" already exists.\n'.format(args.dest_dir))
         sys.exit(1)
     if args.size:
         thumbnail_width = args.size
