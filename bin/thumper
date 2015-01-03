@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import argparse
+
+def get_args():
+    parser = argparse.ArgumentParser(
+        description='Thumper - fast mass image thumbnail generator',
+        epilog='''You must specify exactly one of the --size, --height or --width options.
+
+Use --size if you intend a square thumbnail. Thumper will
+automatically fill the thumbnail within a square of that many pixels,
+using it as height if it's tall and skinny, or width if it is short
+and squat.  ''',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+    parser.add_argument('src_dir',
+                        help='Directory containing source images')
+    parser.add_argument('dest_dir',
+                        help='Directory to create and write thumbnails in')
+    parser.add_argument('--size', default=None, type=int,
+                        help='Thumbnail size (max dimension, height or width) in pixels')
+    parser.add_argument('--height', default=None, type=int,
+                        help='Thumbnail height in pixels')
+    parser.add_argument('--width', default=None, type=int,
+                        help='Thumbnail width in pixels')
+    args = parser.parse_args()
+    # Check that at least one of the size values was specified.
+    size_values = {
+        args.size,
+        args.height,
+        args.width,
+        } - {None}
+    if len(size_values) == 0:
+        parser.error('You must specify the thumbnail size, height or width.')
+    return args
+
+if __name__ == '__main__':
+    args = get_args()
