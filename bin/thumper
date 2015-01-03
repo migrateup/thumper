@@ -41,6 +41,6 @@ if __name__ == '__main__':
     try:
         os.makedirs(args.dest_dir)
     except OSError:
-        sys.stderr.write('Dest directory "{}" already exists, or we don\'t have write permissions.\n')
+        sys.stderr.write('Dest directory "{}" already exists, or we don\'t have write permissions.\n'.format(args.dest_dir))
         sys.exit(1)
     
