@@ -32,8 +32,8 @@ and squat.  ''',
         args.width,
         args.height,
         } - {None}
-    if len(size_values) == 0:
-        parser.error('You must specify the thumbnail size, height or width.')
+    if len(size_values) != 1:
+        parser.error('You must specify the thumbnail size, height or width. But only one of them.')
     return args
 
 if __name__ == '__main__':
