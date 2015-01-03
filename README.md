@@ -1,9 +1,5 @@
 # Thumper - fast mass image thumbnail generator
 
-[Note: as of Jan 3rd, this is in active development, and not all
-promised functionality is implemented yet. Goal for today: make that
-happen!]
-
 Thumper is a scriptable, command-line tool to generate thumbnails of
 large batches of images.  Compared to other tools, Thumper's distinct
 advantage is to fully leverage multiple CPU cores; if run on a machine
