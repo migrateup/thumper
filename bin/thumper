@@ -61,10 +61,27 @@ def find_dest_path(src_dir, dest_dir, src_path):
     return dest_dir + rel_src_path
 
 def create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height):
-    image = Image.open(src_path)
+    try:
+        image = Image.open(src_path)
+    except OSError as err:
+        return {
+            'success'  : False,
+            'pid'      : os.getpid(),
+            'src_path' : src_path,
+            'error'    : str(err),
+        }
     image.thumbnail((thumbnail_width, thumbnail_height))
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     image.save(dest_path)
+    return {
+        'success'  : True,
+        'pid'      : os.getpid(),
+        'src_path' : src_path,
+        }
+
+def log_creation_done(results):
+    for result in results:
+        print(result)
 
 if __name__ == '__main__':
     args = get_args()
@@ -86,6 +103,10 @@ if __name__ == '__main__':
                 yield (src_path, dest_path, thumbnail_width, thumbnail_height)
 
     pool = multiprocessing.Pool(args.processes)
-    pool.starmap(create_thumbnail, gen_child_args())
+    pool.starmap_async(
+        create_thumbnail,
+        gen_child_args(),
+        callback=log_creation_done,
+        )
     pool.close()
     pool.join()
