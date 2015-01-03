@@ -3,6 +3,7 @@
 import os
 import argparse
 import sys
+import multiprocessing
 from PIL import Image
 
 def get_args():
@@ -31,6 +32,8 @@ both of them; the image will be resized to fill this rectangle.
                         help='Max thumbnail width in pixels')
     parser.add_argument('--height', default=None, type=int,
                         help='Max thumbnail height in pixels')
+    parser.add_argument('--processes', default=None, type=int,
+                        help='Number of worker processes. Default is # of cores/cpus on the system')
     args = parser.parse_args()
 
     # check for correct arg combos
@@ -74,8 +77,15 @@ if __name__ == '__main__':
     else:
         thumbnail_width = args.width
         thumbnail_height = args.height
-    for (dirpath, dirnames, filenames) in os.walk(args.src_dir):
-        for filename in filenames:
-            src_path = os.path.join(dirpath, filename)
-            dest_path = find_dest_path(args.src_dir, args.dest_dir, src_path)
-            create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height)
+
+    def gen_child_args():
+        for (dirpath, dirnames, filenames) in os.walk(args.src_dir):
+            for filename in filenames:
+                src_path = os.path.join(dirpath, filename)
+                dest_path = find_dest_path(args.src_dir, args.dest_dir, src_path)
+                yield (src_path, dest_path, thumbnail_width, thumbnail_height)
+
+    pool = multiprocessing.Pool(args.processes)
+    pool.starmap(create_thumbnail, gen_child_args())
+    pool.close()
+    pool.join()
