@@ -21,16 +21,16 @@ and squat.  ''',
                         help='Directory to create and write thumbnails in')
     parser.add_argument('--size', default=None, type=int,
                         help='Thumbnail size (max dimension, height or width) in pixels')
-    parser.add_argument('--height', default=None, type=int,
-                        help='Thumbnail height in pixels')
     parser.add_argument('--width', default=None, type=int,
                         help='Thumbnail width in pixels')
+    parser.add_argument('--height', default=None, type=int,
+                        help='Thumbnail height in pixels')
     args = parser.parse_args()
     # Check that at least one of the size values was specified.
     size_values = {
         args.size,
-        args.height,
         args.width,
+        args.height,
         } - {None}
     if len(size_values) == 0:
         parser.error('You must specify the thumbnail size, height or width.')
@@ -43,4 +43,3 @@ if __name__ == '__main__':
     except OSError:
         sys.stderr.write('Dest directory "{}" already exists, or we don\'t have write permissions.\n'.format(args.dest_dir))
         sys.exit(1)
-    
