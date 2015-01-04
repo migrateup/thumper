@@ -63,6 +63,7 @@ def find_dest_path(src_dir, dest_dir, src_path):
 def create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height):
     try:
         image = Image.open(src_path)
+        image.thumbnail((thumbnail_width, thumbnail_height))
     except OSError as err:
         return {
             'success'  : False,
@@ -77,7 +78,6 @@ def create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height):
             'src_path' : src_path,
             'error'    : str(warn),
         }
-    image.thumbnail((thumbnail_width, thumbnail_height))
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     image.save(dest_path)
     return {
