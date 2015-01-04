@@ -62,7 +62,15 @@ def find_dest_path(src_dir, dest_dir, src_path):
 
 def create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height):
     try:
-        image = Image.open(src_path)
+        try:
+            image = Image.open(src_path)
+        except Image.DecompressionBombWarning as warn:
+            return {
+                'success'  : False,
+                'pid'      : os.getpid(),
+                'src_path' : src_path,
+                'error'    : str(warn),
+            }
         image.thumbnail((thumbnail_width, thumbnail_height))
         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
         image.save(dest_path)
@@ -72,13 +80,6 @@ def create_thumbnail(src_path, dest_path, thumbnail_width, thumbnail_height):
             'pid'      : os.getpid(),
             'src_path' : src_path,
             'error'    : str(err),
-        }
-    except Image.DecompressionBombWarning as warn:
-        return {
-            'success'  : False,
-            'pid'      : os.getpid(),
-            'src_path' : src_path,
-            'error'    : str(warn),
         }
     return {
         'success'  : True,
