@@ -9,15 +9,13 @@ from PIL import Image
 def get_args():
     parser = argparse.ArgumentParser(
         description='Thumper - fast mass image thumbnail generator',
-        epilog='''You must specify exactly one of the --size, --height or --width options.
-
-Specify the thumbnail size in one of two ways. Use --size if you
+        epilog='''Specify the thumbnail size in one of two ways. Use --size if you
 intend a square thumbnail. Thumper will automatically fill the
 thumbnail within a square of that many pixels, using it as height if
 it's tall and skinny, or width if it is short and squat.
 
 Alternatively, use both the --width and --height options. You must use
-both of them; the image will be resized to fill this rectangle.
+both of them; the image will be thumbnailed into this rectangle.
 
 ''',
         formatter_class=argparse.RawDescriptionHelpFormatter,
