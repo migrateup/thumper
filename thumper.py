@@ -3,7 +3,7 @@
 import os
 import argparse
 import sys
-import multiprocessing
+from multiprocessing import Pool
 from PIL import Image
 
 def get_args():
@@ -100,7 +100,7 @@ if __name__ == '__main__':
                 dest_path = find_dest_path(args.src_dir, args.dest_dir, src_path)
                 yield (src_path, dest_path, thumbnail_width, thumbnail_height)
 
-    pool = multiprocessing.Pool(args.processes)
+    pool = Pool(args.processes)
     pool.starmap_async(
         create_thumbnail,
         gen_child_args(),
